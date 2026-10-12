@@ -4,15 +4,309 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>POA Discovery & Personality Quiz 🐾</title>
-  <link rel="stylesheet" href="style.css" />
+  
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef3c7 100%);
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --accent: #10b981;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --border-radius: 24px;
+      --correct: #10b981;
+      --correct-bg: #d1fae5;
+      --wrong: #ef4444;
+      --wrong-bg: #fee2e2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text);
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .bg-decorations {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bubble {
+      position: absolute;
+      font-size: 1.8rem;
+      opacity: 0.25;
+      animation: float 12s infinite ease-in-out;
+    }
+
+    .bubble:nth-child(1) { top: 10%; left: 8%; animation-delay: 0s; }
+    .bubble:nth-child(2) { top: 70%; left: 12%; animation-delay: 2s; }
+    .bubble:nth-child(3) { top: 20%; left: 85%; animation-delay: 4s; }
+    .bubble:nth-child(4) { top: 75%; left: 80%; animation-delay: 1s; }
+    .bubble:nth-child(5) { top: 45%; left: 50%; animation-delay: 3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+
+    .quiz-container {
+      width: 100%;
+      max-width: 680px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      padding: 36px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 20;
+    }
+
+    .card.hidden {
+      display: none !important;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e0e7ff;
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+
+    .intro-animals {
+      font-size: 2.8rem;
+      margin: 24px 0;
+      letter-spacing: 12px;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+      margin-top: 10px;
+      position: relative;
+      z-index: 30;
+      pointer-events: auto;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #6b7280;
+      box-shadow: 0 8px 16px rgba(107, 114, 128, 0.2);
+    }
+
+    .quiz-header {
+      margin-bottom: 24px;
+    }
+
+    .part-tag {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 5%;
+      background: linear-gradient(90deg, #6366f1, #10b981);
+      transition: width 0.3s ease;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .score-tracker {
+      color: var(--accent);
+    }
+
+    .question-section h2 {
+      font-size: 1.35rem;
+      color: var(--text);
+      margin-bottom: 20px;
+      text-align: left;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      padding: 14px 18px;
+      border-radius: 14px;
+      text-align: left;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f0fdf4;
+    }
+
+    .option-btn.selected-correct {
+      background: var(--correct-bg);
+      border-color: var(--correct);
+      color: #065f46;
+      font-weight: 700;
+    }
+
+    .option-btn.selected-wrong {
+      background: var(--wrong-bg);
+      border-color: var(--wrong);
+      color: #991b1b;
+      font-weight: 700;
+    }
+
+    .feedback-box {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 14px;
+      text-align: left;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback-box.correct {
+      background: var(--correct-bg);
+      border: 1px solid var(--correct);
+    }
+
+    .feedback-box.wrong {
+      background: var(--wrong-bg);
+      border: 1px solid var(--wrong);
+    }
+
+    .feedback-box.neutral {
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+    }
+
+    .feedback-message {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .character-box {
+      background: #ffffff;
+      border: 2px dashed #cbd5e1;
+      border-radius: 20px;
+      padding: 24px;
+      margin: 24px 0;
+      text-align: center;
+    }
+
+    .character-emoji {
+      font-size: 4rem;
+      margin-bottom: 8px;
+    }
+
+    .character-box h3 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .score-summary {
+      margin-top: 10px;
+      font-size: 1.1rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Floating background decorations -->
   <div class="bg-decorations" aria-hidden="true">
     <span class="bubble">🐾</span>
     <span class="bubble">✨</span>
@@ -22,18 +316,15 @@
   </div>
 
   <main class="quiz-container">
-    <!-- START / WELCOME CARD -->
-    <div id="start-card" class="card active">
+    <div id="start-card" class="card">
       <div class="badge">POA Adventure 🐾</div>
       <h1>Principles of Accounts Quiz</h1>
       <p>Test your financial savvy and discover your unique study & accounting personality animal!</p>
       <div class="intro-animals">🦉 🐆 🐬 🦫</div>
-      <button id="start-btn" class="btn">Let's Begin! 🚀</button>
+      <button id="start-btn" class="btn" onclick="startQuizNow()">Let's Begin! 🚀</button>
     </div>
 
-    <!-- QUIZ CARD -->
     <div id="quiz-card" class="card hidden">
-      <!-- Progress & Header -->
       <div class="quiz-header">
         <span id="part-tag" class="part-tag">PART 1: POA Discovery</span>
         <div class="progress-bar-container">
@@ -45,30 +336,25 @@
         </div>
       </div>
 
-      <!-- Question & Options -->
       <div class="question-section">
         <h2 id="question-text">Question text goes here...</h2>
         <div id="options-container" class="options-grid"></div>
       </div>
 
-      <!-- Feedback Area for Part 1 -->
       <div id="feedback-box" class="feedback-box hidden">
         <div id="feedback-message" class="feedback-message"></div>
         <button id="next-btn" class="btn">Next Question ➔</button>
       </div>
     </div>
 
-    <!-- RESULT CARD -->
     <div id="result-card" class="card hidden">
       <div class="badge">Quiz Complete! 🎉</div>
       <h2>Your Quiz Results</h2>
       
-      <!-- Part 1 Score Summary -->
       <div class="score-summary">
         <p>You scored <strong id="final-score">0</strong> out of 10 in POA Discovery!</p>
       </div>
 
-      <!-- Part 2 Character Depiction -->
       <div id="character-box" class="character-box">
         <div id="character-emoji" class="character-emoji">🦉</div>
         <h3 id="character-title">The Strategic Owl</h3>
@@ -79,6 +365,355 @@
     </div>
   </main>
 
-  <script src="script.js"></script>
+  <script>
+    // Quiz Questions Data (Total 17 Questions: Q1-Q10 Part 1, Q11-Q17 Part 2)
+    const questions = [
+      {
+        part: 1,
+        question: "Q1\nPOA stands for Principles of Accounts. Which of the following best describes what you will learn in POA?",
+        options: [
+          "A. Recording and analysing the financial transactions of a business",
+          "B. Planning how a business should advertise its products",
+          "C. Learning how businesses hire and manage employees",
+          "D. Studying how businesses design and develop new products"
+        ],
+        answer: 0,
+        explanation: "Correct! POA focuses on recording, analyzing, and summarizing financial transactions to help businesses make decisions."
+      },
+      {
+        part: 1,
+        question: "Q2\nA student starts a small business selling handmade keychains. During the month, she sells 20 keychains at $5 each. Which statement best describes the $100 earned?",
+        options: [
+          "A. It is an asset of the business earned from selling goods.",
+          "B. It is profit earned from the main business activity.",
+          "C. It is revenue earned from the main business activity.",
+          "D. It is an expense incurred from the main business activity."
+        ],
+        answer: 2,
+        explanation: "Correct! Revenue is the total amounts earned from the main business activities before deducting costs."
+      },
+      {
+        part: 1,
+        question: "Q3\nA business sells customised phone cases. During the month, the business pays $200 for packaging materials used for its orders. How should the $200 be classified?",
+        options: [
+          "A. Revenue",
+          "B. Expense",
+          "C. Profit",
+          "D. Capital"
+        ],
+        answer: 1,
+        explanation: "Correct! Expenses are costs incurred in operating the business to generate revenue."
+      },
+      {
+        part: 1,
+        question: "Q4\nA business owns a laptop costing $1,500, which is used by its staff to carry out business activities. Which statement about the laptop is correct?",
+        options: [
+          "A. It is an asset because it is a resource owned by the business that has economic value.",
+          "B. It is an expense because the business paid money to purchase it.",
+          "C. It is revenue because the laptop contributes to the business earning income.",
+          "D. It is profit because the laptop provides benefits to the business."
+        ],
+        answer: 0,
+        explanation: "Correct! An asset is a resource owned or controlled by a business that holds future economic value."
+      },
+      {
+        part: 1,
+        question: "Q5\nProfit is calculated as revenue – cost for the period. A business earns $800 revenue from selling its products. Its expenses for the period are $500. What is the profit?",
+        options: [
+          "A. $100",
+          "B. $300",
+          "C. $800",
+          "D. $1,300"
+        ],
+        answer: 1,
+        explanation: "Correct! $800 (Revenue) - $500 (Expenses) = $300 Profit."
+      },
+      {
+        part: 1,
+        question: "Q6\nProfit is calculated as revenue – cost for the period. A small business earns $2,500 in revenue from selling its products. Its expenses are $1,600. What is the profit for the month?",
+        options: [
+          "A. $4,100",
+          "B. $1,600",
+          "C. $2,500",
+          "D. $900"
+        ],
+        answer: 3,
+        explanation: "Correct! $2,500 (Revenue) - $1,600 (Expenses) = $900 Profit."
+      },
+      {
+        part: 1,
+        question: "Q7\nAn accountant notices that a transaction was recorded as $580, but the receipt shows $850. What should the accountant do?",
+        options: [
+          "A. Leave it as $580 because the transaction has already been recorded",
+          "B. Change the amount to $850 after checking the receipt",
+          "C. Ask someone else to decide which amount should be recorded",
+          "D. Ignore the difference because it is only one transaction"
+        ],
+        answer: 1,
+        explanation: "Correct! Accounting records must accurately reflect source documents (like receipts) to maintain financial integrity."
+      },
+      {
+        part: 1,
+        question: "Q8\nAsset = something valuable that the business owns or controls and can use in the business.\nExamples: cash, laptop, vehicle\nLiability = an amount that the business owes to others.\nExamples: bank loan, amount owed to a supplier\n\nQuestion:\nA business buys a laptop using a bank loan. Which statement is correct?",
+        options: [
+          "A. The laptop is a liability because the business has to pay for it.",
+          "B. The bank loan is an asset because the business received money.",
+          "C. The laptop is an asset and the bank loan is a liability.",
+          "D. Both the laptop and bank loan are assets."
+        ],
+        answer: 2,
+        explanation: "Correct! The laptop is a valuable resource owned/controlled by the business (Asset), while the bank loan is an amount owed to the bank (Liability)."
+      },
+      {
+        part: 1,
+        question: "Q9\nAssets refer to resources a business owns, while liabilities refer to what the business owes to others. Which of the following is a liability?",
+        options: [
+          "A. Cash at bank",
+          "B. Machinery",
+          "C. Loan from bank",
+          "D. Rent expense"
+        ],
+        answer: 2,
+        explanation: "Correct! A bank loan is an obligation owed to an external party, making it a liability."
+      },
+      {
+        part: 1,
+        question: "Q10\nStakeholders are groups of people who use business information to make decisions. Which group is an example of a stakeholder for business in Singapore?",
+        options: [
+          "A. Managers",
+          "B. Employees",
+          "C. Foreign government agencies",
+          "D. Customers"
+        ],
+        answer: 2,
+        explanation: "Correct! External regulators and agencies rely on accounting reports to verify compliance."
+      },
+      {
+        part: 2,
+        question: "Q11 — Group Project\nYour group project is due tomorrow and your group has barely started. What do you do?",
+        options: [
+          "A. Make a plan and divide the work.",
+          "B. Start doing whatever needs to be done immediately.",
+          "C. Ask everyone what they think before deciding what to do.",
+          "D. Don't worry guys, we still have time. 😎"
+        ]
+      },
+      {
+        part: 2,
+        question: "Q12 — The $5 Mystery\nYou find $5 on the classroom floor. What's your first thought?",
+        options: [
+          "A. Whose is this?",
+          "B. Hmm... what should I do with this? 👀",
+          "C. I should probably hand it to the teacher.",
+          "D. FREE MONEY! 😭"
+        ]
+      },
+      {
+        part: 2,
+        question: "Q13 — Choose Your Study Desk\nPick your ideal study desk:",
+        options: [
+          "A. Everything neatly arranged and easy to find.",
+          "B. Laptop, calculator, stationery and snacks ready to go.",
+          "C. Colourful stationery, notes and random interesting things everywhere.",
+          "D. One small clear space amongst complete chaos. 😂"
+        ]
+      },
+      {
+        part: 2,
+        question: "Q14 — Test Tomorrow\nYou have a test tomorrow. What best describes you?",
+        options: [
+          "A. I like to start early so I don't have to rush.",
+          "B. I make a plan, but I don't always stick to it.",
+          "C. I usually study when I feel I'm ready to focus.",
+          "D. Somehow, my brain becomes extremely productive the night before."
+        ]
+      },
+      {
+        part: 2,
+        question: "Q15 — Ethics\nYou are hiring a chief accountant for your bubble tea shop. What is the single most non-negotiable trait you look for?",
+        options: [
+          "A. They strictly tell the truth on financial records, even if the business had a bad month.",
+          "B. They make decisions based on clear evidence and facts, not personal feelings or favoritism.",
+          "C. They focus 100% on making as much profit as possible, no matter what rules they cut.",
+          "D. They finish balance sheets at lightning speed, even if they skip double-checking."
+        ]
+      },
+      {
+        part: 2,
+        question: "Q16 — Ethics\nYour business partner wants to hide $5,000 of profit from tax auditors to pay less tax and split extra cash. What's your move?",
+        options: [
+          "A. Immediately kick him out of the business.",
+          "B. Report him to the relevant authorities.",
+          "C. Talk him out of it.",
+          "D. Consider it if no one finds out! 🤫"
+        ]
+      },
+      {
+        part: 2,
+        question: "Q17 — Evaluate\nWhich of these sounds most like your reaction when deciding whether to take POA?",
+        options: [
+          "A. Sign me up right now!",
+          "B. I'm curious, tell me more...",
+          "C. I'll take it if my friends take it!",
+          "D. Numbers give me a headache... but I like money!"
+        ]
+      }
+    ];
+
+    const characters = {
+      A: {
+        title: "The Strategic Owl 🦉",
+        emoji: "🦉",
+        desc: "Methodical, organized, and super trustworthy! You like order, clear rules, and preparing early. You'll likely excel at keeping POA ledgers perfectly balanced!"
+      },
+      B: {
+        title: "The Energetic Cheetah 🐆",
+        emoji: "🐆",
+        desc: "Action-oriented and fast! You jump right into tasks and adapt on the go. In POA, your speedy calculations and quick decision-making will be your superpower!"
+      },
+      C: {
+        title: "The Friendly Dolphin 🐬",
+        emoji: "🐬",
+        desc: "Collaborative, empathetic, and communicative! You value teamwork and social connection. You'll be the group partner everyone wants in business class!"
+      },
+      D: {
+        title: "The Chill Capybara 🦫",
+        emoji: "🦫",
+        desc: "Cool, calm, and collected under pressure! Even when deadlines loom, you keep your composure. Your relaxed mindset keeps stress low when crunching big numbers!"
+      }
+    };
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let personalityScores = { A: 0, B: 0, C: 0, D: 0 };
+
+    let startCard, quizCard, resultCard, progressBar, partTag, questionCount, scoreTracker, questionText, optionsContainer, feedbackBox, feedbackMessage, nextBtn;
+
+    function initVars() {
+      startCard = document.getElementById("start-card");
+      quizCard = document.getElementById("quiz-card");
+      resultCard = document.getElementById("result-card");
+
+      progressBar = document.getElementById("progress-bar");
+      partTag = document.getElementById("part-tag");
+      questionCount = document.getElementById("question-count");
+      scoreTracker = document.getElementById("score-tracker");
+
+      questionText = document.getElementById("question-text");
+      optionsContainer = document.getElementById("options-container");
+      feedbackBox = document.getElementById("feedback-box");
+      feedbackMessage = document.getElementById("feedback-message");
+      nextBtn = document.getElementById("next-btn");
+
+      if (nextBtn) nextBtn.onclick = handleNextQuestion;
+      const restartBtn = document.getElementById("restart-btn");
+      if (restartBtn) restartBtn.onclick = resetQuiz;
+    }
+
+    function startQuizNow() {
+      initVars();
+      startCard.classList.add("hidden");
+      quizCard.classList.remove("hidden");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const currentQ = questions[currentQuestionIndex];
+      const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+      questionCount.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+      
+      if (currentQ.part === 1) {
+        partTag.textContent = "PART 1: POA DISCOVERY";
+        scoreTracker.style.display = "inline";
+      } else {
+        partTag.textContent = "PART 2: GET TO KNOW YOU 🎀";
+        scoreTracker.style.display = "none";
+      }
+
+      questionText.innerText = currentQ.question;
+      optionsContainer.innerHTML = "";
+      feedbackBox.classList.add("hidden");
+
+      currentQ.options.forEach((optText, index) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = optText;
+        btn.onclick = () => selectOption(index);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedIndex) {
+      const currentQ = questions[currentQuestionIndex];
+      const optionButtons = optionsContainer.querySelectorAll(".option-btn");
+
+      optionButtons.forEach(btn => btn.disabled = true);
+
+      if (currentQ.part === 1) {
+        if (selectedIndex === currentQ.answer) {
+          score++;
+          scoreTracker.textContent = `Score: ${score}`;
+          optionButtons[selectedIndex].classList.add("selected-correct");
+          feedbackBox.className = "feedback-box correct";
+          feedbackMessage.innerHTML = `✨ <strong>Correct!</strong> ${currentQ.explanation}`;
+        } else {
+          optionButtons[selectedIndex].classList.add("selected-wrong");
+          optionButtons[currentQ.answer].classList.add("selected-correct");
+          feedbackBox.className = "feedback-box wrong";
+          feedbackMessage.innerHTML = `❌ <strong>Not quite!</strong> ${currentQ.explanation}`;
+        }
+      } else {
+        const choiceKey = ["A", "B", "C", "D"][selectedIndex];
+        if (choiceKey) personalityScores[choiceKey]++;
+
+        optionButtons[selectedIndex].classList.add("selected-correct");
+        feedbackBox.className = "feedback-box neutral";
+        feedbackMessage.innerHTML = `💡 Great choice! Let's see what this says about you...`;
+      }
+
+      feedbackBox.classList.remove("hidden");
+    }
+
+    function handleNextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      quizCard.classList.add("hidden");
+      resultCard.classList.remove("hidden");
+
+      document.getElementById("final-score").textContent = score;
+
+      let maxCount = -1;
+      let dominantChar = "A";
+
+      for (const [key, count] of Object.entries(personalityScores)) {
+        if (count > maxCount) {
+          maxCount = count;
+          dominantChar = key;
+        }
+      }
+
+      const resultData = characters[dominantChar] || characters["A"];
+      document.getElementById("character-emoji").textContent = resultData.emoji;
+      document.getElementById("character-title").textContent = resultData.title;
+      document.getElementById("character-desc").textContent = resultData.desc;
+    }
+
+    function resetQuiz() {
+      currentQuestionIndex = 0;
+      score = 0;
+      personalityScores = { A: 0, B: 0, C: 0, D: 0 };
+      scoreTracker.textContent = `Score: 0`;
+      resultCard.classList.add("hidden");
+      startCard.classList.remove("hidden");
+    }
+  </script>
 </body>
 </html>
