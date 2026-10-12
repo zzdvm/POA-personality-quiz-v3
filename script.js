@@ -1,6 +1,6 @@
 // Quiz Questions Data
 const questions = [
-  // --- PART 1: POA DISCOVERY ---
+  // --- PART 1: POA DISCOVERY (Q1 to Q10) ---
   {
     part: 1,
     question: "Q1\nPOA stands for Principles of Accounts. Which of the following best describes what you will learn in POA?",
@@ -127,67 +127,11 @@ A business buys a laptop using a bank loan. Which statement is correct?",
     answer: 2,
     explanation: "Correct! External regulators and agencies rely on accounting reports to verify compliance."
   },
-  {
-    part: 1,
-    question: "Q11\nBusinesses should always assume the best-case scenario when recording down accounting information.",
-    options: [
-      "A. True",
-      "B. False"
-    ],
-    answer: 1,
-    explanation: "Correct! Accounting requires prudence and objectivity rather than overly optimistic assumptions."
-  },
-  {
-    part: 1,
-    question: "Q12\nBusinesses should only care about profit and loss when making decisions.",
-    options: [
-      "A. True",
-      "B. False"
-    ],
-    answer: 1,
-    explanation: "Correct! Businesses must also consider liquidity, ethics, and long-term sustainability."
-  },
-  {
-    part: 1,
-    question: "Q13\nWhat is inventory?",
-    options: [
-      "A. The physical goods a business buys to sell to its customers",
-      "B. The money a business owes to its suppliers",
-      "C. The cash collected from daily sales",
-      "D. The monthly bills paid to keep the shop running"
-    ],
-    answer: 0,
-    explanation: "Correct! Inventory consists of goods held by a business intended for resale."
-  },
-  {
-    part: 1,
-    question: "Q14\nWhat should a business do when they realise their goods are damaged?",
-    options: [
-      "A. Pretend the goods are not damaged and continue selling them",
-      "B. Increase the selling price to cover the cost of damaged goods",
-      "C. Record the damaged goods as a loss to the business",
-      "D. Throw the goods away without any recording"
-    ],
-    answer: 2,
-    explanation: "Correct! Loss of damaged inventory must be accurately recorded in financial statements."
-  },
-  {
-    part: 1,
-    question: "Q15\nWhich of the following is classified as an Expense?",
-    options: [
-      "A. Purchase of a delivery truck for business use",
-      "B. Cash received from a customer settling a debt",
-      "C. Monthly rent paid for the retail shop premises",
-      "D. Bank loan borrowed to start the business"
-    ],
-    answer: 2,
-    explanation: "Correct! Rent is an operational expense incurred during business operations."
-  },
 
-  // --- PART 2: GET TO KNOW YOU ---
+  // --- PART 2: GET TO KNOW YOU (Q11 to Q17) ---
   {
     part: 2,
-    question: "Q16 — Group Project\nYour group project is due tomorrow and your group has barely started. What do you do?",
+    question: "Q11 — Group Project\nYour group project is due tomorrow and your group has barely started. What do you do?",
     options: [
       "A. Make a plan and divide the work.",
       "B. Start doing whatever needs to be done immediately.",
@@ -197,7 +141,7 @@ A business buys a laptop using a bank loan. Which statement is correct?",
   },
   {
     part: 2,
-    question: "Q17 — The $5 Mystery\nYou find $5 on the classroom floor. What's your first thought?",
+    question: "Q12 — The $5 Mystery\nYou find $5 on the classroom floor. What's your first thought?",
     options: [
       "A. Whose is this?",
       "B. Hmm... what should I do with this? 👀",
@@ -207,7 +151,7 @@ A business buys a laptop using a bank loan. Which statement is correct?",
   },
   {
     part: 2,
-    question: "Q18 — Choose Your Study Desk\nPick your ideal study desk:",
+    question: "Q13 — Choose Your Study Desk\nPick your ideal study desk:",
     options: [
       "A. Everything neatly arranged and easy to find.",
       "B. Laptop, calculator, stationery and snacks ready to go.",
@@ -217,7 +161,7 @@ A business buys a laptop using a bank loan. Which statement is correct?",
   },
   {
     part: 2,
-    question: "Q19 — Test Tomorrow\nYou have a test tomorrow. What best describes you?",
+    question: "Q14 — Test Tomorrow\nYou have a test tomorrow. What best describes you?",
     options: [
       "A. I like to start early so I don't have to rush.",
       "B. I make a plan, but I don't always stick to it.",
@@ -227,7 +171,7 @@ A business buys a laptop using a bank loan. Which statement is correct?",
   },
   {
     part: 2,
-    question: "Q20 — Ethics\nYou are hiring a chief accountant for your bubble tea shop. What is the single most non-negotiable trait you look for?",
+    question: "Q15 — Ethics\nYou are hiring a chief accountant for your bubble tea shop. What is the single most non-negotiable trait you look for?",
     options: [
       "A. They strictly tell the truth on financial records, even if the business had a bad month.",
       "B. They make decisions based on clear evidence and facts, not personal feelings or favoritism.",
@@ -237,7 +181,7 @@ A business buys a laptop using a bank loan. Which statement is correct?",
   },
   {
     part: 2,
-    question: "Q21 — Ethics\nYour business partner wants to hide $5,000 of profit from tax auditors to pay less tax and split extra cash. What's your move?",
+    question: "Q16 — Ethics\nYour business partner wants to hide $5,000 of profit from tax auditors to pay less tax and split extra cash. What's your move?",
     options: [
       "A. Immediately kick him out of the business.",
       "B. Report him to the relevant authorities.",
@@ -247,7 +191,7 @@ A business buys a laptop using a bank loan. Which statement is correct?",
   },
   {
     part: 2,
-    question: "Q22 — Evaluate\nWhich of these sounds most like your reaction when deciding whether to take POA?",
+    question: "Q17 — Evaluate\nWhich of these sounds most like your reaction when deciding whether to take POA?",
     options: [
       "A. Sign me up right now!",
       "B. I'm curious, tell me more...",
