@@ -5,7 +5,7 @@
   --accent: #10b981;
   --text: #1f2937;
   --text-muted: #6b7280;
-  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-bg: rgba(255, 255, 255, 0.95);
   --border-radius: 24px;
   --correct: #10b981;
   --correct-bg: #d1fae5;
@@ -17,10 +17,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-.hidden {
-  display: none !important;
 }
 
 body {
@@ -68,7 +64,7 @@ body {
   width: 100%;
   max-width: 680px;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .card {
@@ -76,13 +72,15 @@ body {
   backdrop-filter: blur(10px);
   border-radius: var(--border-radius);
   padding: 36px 32px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   text-align: center;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 20;
 }
 
 .card.hidden {
-  display: none;
+  display: none !important;
 }
 
 .badge {
@@ -115,14 +113,7 @@ p {
 .intro-animals {
   font-size: 2.8rem;
   margin: 24px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-}
-
-.intro-animals span {
-  line-height: 1;
+  letter-spacing: 12px;
 }
 
 .btn {
@@ -137,21 +128,14 @@ p {
   transition: transform 0.2s ease, background 0.2s ease;
   box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
   margin-top: 10px;
+  position: relative;
+  z-index: 30;
+  pointer-events: auto;
 }
 
 .btn:hover {
   background: var(--primary-hover);
   transform: translateY(-2px);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  transform: none;
 }
 
 .btn-secondary {
@@ -193,7 +177,7 @@ p {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  font-color: var(--text-muted);
+  color: var(--text-muted);
   font-weight: 600;
 }
 
@@ -207,6 +191,7 @@ p {
   margin-bottom: 20px;
   text-align: left;
   line-height: 1.4;
+  white-space: pre-line;
 }
 
 .options-grid {
@@ -226,8 +211,6 @@ p {
   color: var(--text);
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
 }
 
 .option-btn:hover:not(:disabled) {
@@ -247,10 +230,6 @@ p {
   border-color: var(--wrong);
   color: #991b1b;
   font-weight: 700;
-}
-
-.option-btn:disabled {
-  cursor: default;
 }
 
 .feedback-box {
