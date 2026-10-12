@@ -253,6 +253,10 @@
       animation: fadeIn 0.3s ease;
     }
 
+    .feedback-box.hidden {
+      display: none !important;
+    }
+
     .feedback-box.correct {
       background: var(--correct-bg);
       border: 1px solid var(--correct);
@@ -316,6 +320,7 @@
   </div>
 
   <main class="quiz-container">
+    <!-- START CARD -->
     <div id="start-card" class="card">
       <div class="badge">POA Adventure 🐾</div>
       <h1>Principles of Accounts Quiz</h1>
@@ -324,6 +329,7 @@
       <button id="start-btn" class="btn" onclick="startQuizNow()">Let's Begin! 🚀</button>
     </div>
 
+    <!-- QUIZ CARD -->
     <div id="quiz-card" class="card hidden">
       <div class="quiz-header">
         <span id="part-tag" class="part-tag">PART 1: POA Discovery</span>
@@ -337,7 +343,7 @@
       </div>
 
       <div class="question-section">
-        <h2 id="question-text">Question text goes here...</h2>
+        <h2 id="question-text"></h2>
         <div id="options-container" class="options-grid"></div>
       </div>
 
@@ -347,6 +353,7 @@
       </div>
     </div>
 
+    <!-- RESULT CARD -->
     <div id="result-card" class="card hidden">
       <div class="badge">Quiz Complete! 🎉</div>
       <h2>Your Quiz Results</h2>
@@ -366,7 +373,7 @@
   </main>
 
   <script>
-    // Quiz Questions Data (Total 17 Questions: Q1-Q10 Part 1, Q11-Q17 Part 2)
+    // Quiz Questions Data (17 Total: Q1-Q10 Part 1, Q11-Q17 Part 2)
     const questions = [
       {
         part: 1,
@@ -378,7 +385,7 @@
           "D. Studying how businesses design and develop new products"
         ],
         answer: 0,
-        explanation: "Correct! POA focuses on recording, analyzing, and summarizing financial transactions to help businesses make decisions."
+        explanation: "POA focuses on recording, analyzing, and summarizing financial transactions to help businesses make decisions."
       },
       {
         part: 1,
@@ -390,7 +397,7 @@
           "D. It is an expense incurred from the main business activity."
         ],
         answer: 2,
-        explanation: "Correct! Revenue is the total amounts earned from the main business activities before deducting costs."
+        explanation: "Revenue is the total amount earned from main business activities before deducting costs."
       },
       {
         part: 1,
@@ -402,7 +409,7 @@
           "D. Capital"
         ],
         answer: 1,
-        explanation: "Correct! Expenses are costs incurred in operating the business to generate revenue."
+        explanation: "Expenses are costs incurred in operating the business to generate revenue."
       },
       {
         part: 1,
@@ -414,7 +421,7 @@
           "D. It is profit because the laptop provides benefits to the business."
         ],
         answer: 0,
-        explanation: "Correct! An asset is a resource owned or controlled by a business that holds future economic value."
+        explanation: "An asset is a resource owned or controlled by a business that holds future economic value."
       },
       {
         part: 1,
@@ -426,7 +433,7 @@
           "D. $1,300"
         ],
         answer: 1,
-        explanation: "Correct! $800 (Revenue) - $500 (Expenses) = $300 Profit."
+        explanation: "$800 (Revenue) - $500 (Expenses) = $300 Profit."
       },
       {
         part: 1,
@@ -438,7 +445,7 @@
           "D. $900"
         ],
         answer: 3,
-        explanation: "Correct! $2,500 (Revenue) - $1,600 (Expenses) = $900 Profit."
+        explanation: "$2,500 (Revenue) - $1,600 (Expenses) = $900 Profit."
       },
       {
         part: 1,
@@ -450,7 +457,7 @@
           "D. Ignore the difference because it is only one transaction"
         ],
         answer: 1,
-        explanation: "Correct! Accounting records must accurately reflect source documents (like receipts) to maintain financial integrity."
+        explanation: "Accounting records must accurately reflect source documents (like receipts) to maintain financial integrity."
       },
       {
         part: 1,
@@ -462,7 +469,7 @@
           "D. Both the laptop and bank loan are assets."
         ],
         answer: 2,
-        explanation: "Correct! The laptop is a valuable resource owned/controlled by the business (Asset), while the bank loan is an amount owed to the bank (Liability)."
+        explanation: "The laptop is a valuable resource owned/controlled by the business (Asset), while the bank loan is an amount owed to the bank (Liability)."
       },
       {
         part: 1,
@@ -474,7 +481,7 @@
           "D. Rent expense"
         ],
         answer: 2,
-        explanation: "Correct! A bank loan is an obligation owed to an external party, making it a liability."
+        explanation: "A bank loan is an obligation owed to an external party, making it a liability."
       },
       {
         part: 1,
@@ -486,7 +493,7 @@
           "D. Customers"
         ],
         answer: 2,
-        explanation: "Correct! External regulators and agencies rely on accounting reports to verify compliance."
+        explanation: "External regulators and agencies rely on accounting reports to verify compliance."
       },
       {
         part: 2,
@@ -633,7 +640,10 @@
 
       questionText.innerText = currentQ.question;
       optionsContainer.innerHTML = "";
+      
+      // Ensure feedback box is completely hidden when a new question loads
       feedbackBox.classList.add("hidden");
+      feedbackMessage.innerHTML = "";
 
       currentQ.options.forEach((optText, index) => {
         const btn = document.createElement("button");
